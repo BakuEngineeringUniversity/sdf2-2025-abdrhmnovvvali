@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="output.css">
+    <title>DevToys</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .sidebar-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .tool-content {
+            display: none;
+        }
+        .tool-content.active {
+            display: block;
+        }
+        .home-content {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 h-screen flex flex-col">
+    <header class="bg-gray-800 text-white p-2 flex items-center justify-between shadow-md">
+        <div class="flex items-center">
+            <button class="mr-2 focus:outline-none" id="back-button">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h1 class="text-lg font-medium">DevToys</h1>
+        </div>
+        <div>
+            <button class="mx-1 focus:outline-none"><i class="fas fa-window-minimize"></i></button>
+            <button class="mx-1 focus:outline-none"><i class="far fa-square"></i></button>
+            <button class="mx-1 focus:outline-none"><i class="fas fa-times"></i></button>
+        </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden">
+        <aside class="w-64 bg-gray-800 text-white flex flex-col">
+            <div class="p-2">
+                <div class="relative">
+                    <input type="text" placeholder="Type to search for tools..." class="w-full bg-gray-700 text-white px-3 py-2 rounded focus:outline-none">
+                    <button class="absolute right-2 top-2 text-gray-400 focus:outline-none">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+
+            <nav class="flex-1 overflow-y-auto">
+                <ul>
+                    <li class="sidebar-item px-4 py-2 flex items-center hover:bg-gray-700 cursor-pointer" id="home-nav">
+                        <i class="fas fa-home mr-3"></i>
+                        <span>All tools</span>
+                    </li>
+                    <li class="sidebar-item px-4 py-2 flex items-center justify-between hover:bg-gray-700 cursor-pointer">
+                        <div class="flex items-center">
+                            <i class="fas fa-exchange-alt mr-3"></i>
+                            <span>Converters</span>
+                        </div>
+                        <i class="fas fa-chevron-down text-sm"></i>
+                    </li>
+                    <li class="sidebar-item px-4 py-2 flex items-center justify-between hover:bg-gray-700 cursor-pointer">
+                        <div class="flex items-center">
+                            <i class="fas fa-code mr-3"></i>
+                            <span>Encoders / Decoders</span>
+                        </div>
+                        <i class="fas fa-chevron-down text-sm"></i>
+                    </li>
+                    <li class="sidebar-item px-4 py-2 flex items-center justify-between hover:bg-gray-700 cursor-pointer">
+                        <div class="flex items-center">
+                            <i class="fas fa-align-left mr-3"></i>
+                            <span>Formatters</span>
+                        </div>
+                        <i class="fas fa-chevron-down text-sm"></i>
+                    </li>
+                    <li class="sidebar-item px-4 py-2 flex items-center justify-between hover:bg-gray-700 cursor-pointer">
+                        <div class="flex items-center">
+                            <i class="fas fa-magic mr-3"></i>
+                            <span>Generators</span>
+                        </div>
+                        <i class="fas fa-chevron-down text-sm"></i>
+                    </li>
+                    <li class="sidebar-item px-4 py-2 flex items-center justify-between hover:bg-gray-700 cursor-pointer">
+                        <div class="flex items-center">
+                            <i class="fas fa-image mr-3"></i>
+                            <span>Graphic</span>
+                        </div>
+                        <i class="fas fa-chevron-down text-sm"></i>
+                    </li>
+                    <li class="sidebar-item px-4 py-2 flex items-center justify-between hover:bg-gray-700 cursor-pointer">
+                        <div class="flex items-center">
+                            <i class="fas fa-vial mr-3"></i>
+                            <span>Testers</span>
+                        </div>
+                        <i class="fas fa-chevron-down text-sm"></i>
+                    </li>
+                    <li class="sidebar-item px-4 py-2 flex items-center justify-between hover:bg-gray-700 cursor-pointer">
+                        <div class="flex items-center">
+                            <i class="fas fa-font mr-3"></i>
+                            <span>Text</span>
+                        </div>
+                        <i class="fas fa-chevron-down text-sm"></i>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="mt-auto border-t border-gray-700">
+                <ul>
+                    <li class="sidebar-item px-4 py-2 flex items-center hover:bg-gray-700 cursor-pointer">
+                        <i class="fas fa-heart mr-3"></i>
+                        <span>Support the development</span>
+                    </li>
+                    <li class="sidebar-item px-4 py-2 flex items-center hover:bg-gray-700 cursor-pointer">
+                        <i class="fas fa-puzzle-piece mr-3"></i>
+                        <span>Manage extensions</span>
+                    </li>
+                    <li class="sidebar-item px-4 py-2 flex items-center hover:bg-gray-700 cursor-pointer">
+                        <i class="fas fa-cog mr-3"></i>
+                        <span>Settings</span>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="flex-1 overflow-y-auto bg-purple-900">
+            <div id="home-content" class="home-content p-6">
+                <div class="mb-8">
+                    <h1 class="text-4xl font-bold text-white">Welcome to DevToys <span class="text-sm font-normal text-gray-300">v2.0.0-pre.0</span></h1>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4 cursor-pointer hover:bg-opacity-70 transition" id="base64-image-card">
+                        <div class="flex items-start">
+                            <div class="bg-gray-700 p-4 rounded-lg mr-4">
+                                <div class="text-white text-4xl">
+                                    <i class="fas fa-file-image"></i>
+                                    <span class="text-sm absolute ml-1">64</span>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex justify-between items-center">
+                                    <h3 class="text-white font-bold">Base64 Image Encoder / Decoder</h3>
+                                    <button class="text-white focus:outline-none">
+                                        <i class="far fa-copy"></i>
+                                    </button>
+                                </div>
+                                <p class="text-gray-300 text-sm mt-1">Encode and decode Base64 image data</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4 cursor-pointer hover:bg-opacity-70 transition" id="base64-text-card">
+                        <div class="flex items-start">
+                            <div class="bg-gray-700 p-4 rounded-lg mr-4">
+                                <div class="text-white text-4xl">
+                                    <i class="fas fa-file-alt"></i>
+                                    <span class="text-sm absolute ml-1">64</span>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex justify-between items-center">
+                                    <h3 class="text-white font-bold">Base64 Text Encoder / Decoder</h3>
+                                    <button class="text-white focus:outline-none">
+                                        <i class="far fa-copy"></i>
+                                    </button>
+                                </div>
+                                <p class="text-gray-300 text-sm mt-1">Encode and decode Base64 text data</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4 cursor-pointer hover:bg-opacity-70 transition" id="certificate-decoder-card">
+                        <div class="flex items-start">
+                            <div class="bg-gray-700 p-4 rounded-lg mr-4">
+                                <div class="text-white text-4xl">
+                                    <i class="fas fa-certificate"></i>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex justify-between items-center">
+                                    <h3 class="text-white font-bold">Certificate Decoder</h3>
+                                    <button class="text-white focus:outline-none">
+                                        <i class="far fa-copy"></i>
+                                    </button>
+                                </div>
+                                <p class="text-gray-300 text-sm mt-1">Decode a certificate</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4 cursor-pointer hover:bg-opacity-70 transition">
+                        <div class="flex items-start">
+                            <div class="bg-gray-700 p-4 rounded-lg mr-4">
+                                <div class="text-white text-4xl">
+                                    <i class="fas fa-low-vision"></i>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex justify-between items-center">
+                                    <h3 class="text-white font-bold">Color Blindness Simulator</h3>
+                                    <button class="text-white focus:outline-none">
+                                        <i class="far fa-copy"></i>
+                                    </button>
+                                </div>
+                                <p class="text-gray-300 text-sm mt-1">Simulate color blindness on a picture or screenshot</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4 cursor-pointer hover:bg-opacity-70 transition">
+                        <div class="flex items-start">
+                            <div class="bg-gray-700 p-4 rounded-lg mr-4">
+                                <div class="text-white text-4xl">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex justify-between items-center">
+                                    <h3 class="text-white font-bold">Cron expression parser</h3>
+                                    <button class="text-white focus:outline-none">
+                                        <i class="far fa-copy"></i>
+                                    </button>
+                                </div>
+                                <p class="text-gray-300 text-sm mt-1">Parse Cron expression to get scheduled dates</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4 cursor-pointer hover:bg-opacity-70 transition">
+                        <div class="flex items-start">
+                            <div class="bg-gray-700 p-4 rounded-lg mr-4">
+                                <div class="text-white text-4xl">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex justify-between items-center">
+                                    <h3 class="text-white font-bold">Date Converter</h3>
+                                    <button class="text-white focus:outline-none">
+                                        <i class="far fa-copy"></i>
+                                    </button>
+                                </div>
+                                <p class="text-gray-300 text-sm mt-1">Convert date to human-readable date and vice versa</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="base64-image-content" class="tool-content p-6">
+                <div class="mb-6">
+                    <h1 class="text-2xl font-bold text-white">Base64 Image Encoder / Decoder</h1>
+                    <p class="text-gray-300">Encode images to Base64 string or decode Base64 string to image</p>
+                </div>
+
+                <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4">
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div class="flex-1">
+                            <div class="mb-4">
+                                <label class="block text-white text-sm font-medium mb-2">Mode</label>
+                                <div class="flex bg-gray-700 rounded overflow-hidden">
+                                    <button id="encode-image-btn" class="flex-1 py-2 px-4 text-sm text-white bg-blue-600 focus:outline-none">Encode</button>
+                                    <button id="decode-image-btn" class="flex-1 py-2 px-4 text-sm text-white bg-transparent focus:outline-none">Decode</button>
+                                </div>
+                            </div>
+
+                            <div id="encode-image-panel">
+                                <label class="block text-white text-sm font-medium mb-2">Input Image</label>
+                                <div class="border-2 border-dashed border-gray-600 rounded-lg p-6 text-center">
+                                    <input type="file" id="image-input" class="hidden" accept="image/*">
+                                    <div id="image-preview" class="mb-4 hidden">
+                                        <img id="preview-img" class="max-h-48 mx-auto">
+                                    </div>
+                                    <div id="drop-area" class="cursor-pointer">
+                                        <i class="fas fa-cloud-upload-alt text-gray-400 text-3xl mb-2"></i>
+                                        <p class="text-gray-400">Drag and drop an image here or</p>
+                                        <button class="mt-2 bg-blue-600 hover:bg-blue-700 text-white py-1 px-4 rounded focus:outline-none">
+                                            Select Image
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="decode-image-panel" class="hidden">
+                                <label class="block text-white text-sm font-medium mb-2">Base64 String</label>
+                                <textarea id="base64-image-input" class="w-full h-64 bg-gray-700 text-white rounded p-3 focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Paste Base64 string here..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="flex-1">
+                            <div class="mb-4">
+                                <label class="block text-white text-sm font-medium mb-2">Output</label>
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-gray-400 text-sm">Base64 Result</span>
+                                    <button id="copy-image-output" class="text-blue-500 text-sm hover:text-blue-400 focus:outline-none">
+                                        <i class="far fa-copy mr-1"></i> Copy
+                                    </button>
+                                </div>
+                                <div class="relative">
+                                    <textarea id="base64-image-output" class="w-full h-64 bg-gray-700 text-white rounded p-3 focus:outline-none focus:ring-2 focus:ring-blue-600" readonly></textarea>
+                                </div>
+                            </div>
+                            <div id="decoded-image-preview" class="mt-4 hidden">
+                                <label class="block text-white text-sm font-medium mb-2">Decoded Image Preview</label>
+                                <div class="bg-gray-700 p-4 rounded-lg text-center">
+                                    <img id="decoded-img" class="max-h-48 mx-auto">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="base64-text-content" class="tool-content p-6">
+                <div class="mb-6">
+                    <h1 class="text-2xl font-bold text-white">Base64 Text Encoder / Decoder</h1>
+                    <p class="text-gray-300">Encode text to Base64 string or decode Base64 string to text</p>
+                </div>
+
+                <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4">
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div class="flex-1">
+                            <div class="mb-4">
+                                <label class="block text-white text-sm font-medium mb-2">Mode</label>
+                                <div class="flex bg-gray-700 rounded overflow-hidden">
+                                    <button id="encode-text-btn" class="flex-1 py-2 px-4 text-sm text-white bg-blue-600 focus:outline-none">Encode</button>
+                                    <button id="decode-text-btn" class="flex-1 py-2 px-4 text-sm text-white bg-transparent focus:outline-none">Decode</button>
+                                </div>
+                            </div>
+                            <div>
+                                <label id="input-text-label" class="block text-white text-sm font-medium mb-2">Input Text</label>
+                                <textarea id="text-input" class="w-full h-64 bg-gray-700 text-white rounded p-3 focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Type or paste text to encode..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="flex-1">
+                            <div class="mb-4">
+                                <label class="block text-white text-sm font-medium mb-2">Output</label>
+                                <div class="flex justify-between mb-2">
+                                    <span id="output-text-label" class="text-gray-400 text-sm">Base64 Result</span>
+                                    <button id="copy-text-output" class="text-blue-500 text-sm hover:text-blue-400 focus:outline-none">
+                                        <i class="far fa-copy mr-1"></i> Copy
+                                    </button>
+                                </div>
+                                <textarea id="text-output" class="w-full h-64 bg-gray-700 text-white rounded p-3 focus:outline-none focus:ring-2 focus:ring-blue-600" readonly></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="certificate-decoder-content" class="tool-content p-6">
+                <div class="mb-6">
+                    <h1 class="text-2xl font-bold text-white">Certificate Decoder</h1>
+                    <p class="text-gray-300">Decode and view certificate details</p>
+                </div>
+
+                <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4">
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div class="flex-1">
+                            <label class="block text-white text-sm font-medium mb-2">Certificate (PEM format)</label>
+                            
+                            <div class="mb-4">
+                                <textarea id="certificate-input" class="w-full h-64 bg-gray-700 text-white rounded p-3 focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Paste your certificate in PEM format here...
+Example:
+-----BEGIN CERTIFICATE-----
+MIIDdzCCAl+gAwIBAgIEAgAAuTANBgkqhkiG9w0BAQUFADBaMQswCQYDVQQGEwJJ
+...
+-----END CERTIFICATE-----"></textarea>
+                            </div>
+                            
+                            <div class="text-center">
+                                <button id="decode-certificate-btn" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded focus:outline-none">
+                                    Decode Certificate
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex-1">
+                            <label class="block text-white text-sm font-medium mb-2">Certificate Details</label>
+                            
+                            <div class="bg-gray-700 rounded p-4 h-64 overflow-y-auto">
+                                <div id="certificate-details" class="text-gray-200 text-sm">
+                                    <p class="text-gray-400 text-center">Certificate details will appear here...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const homeContent = document.getElementById('home-content');
+            const base64ImageContent = document.getElementById('base64-image-content');
+            const base64TextContent = document.getElementById('base64-text-content');
+            const certificateDecoderContent = document.getElementById('certificate-decoder-content');
+            
+            const base64ImageCard = document.getElementById('base64-image-card');
+            const base64TextCard = document.getElementById('base64-text-card');
+            const certificateDecoderCard = document.getElementById('certificate-decoder-card');
+            const homeNav = document.getElementById('home-nav');
+            const backButton = document.getElementById('back-button');
+            
+            function showHomeContent() {
+                homeContent.style.display = 'block';
+                base64ImageContent.style.display = 'none';
+                base64TextContent.style.display = 'none';
+                certificateDecoderContent.style.display = 'none';
+            }
+            
+            base64ImageCard.addEventListener('click', function() {
+                homeContent.style.display = 'none';
+                base64ImageContent.style.display = 'block';
+                base64TextContent.style.display = 'none';
+                certificateDecoderContent.style.display = 'none';
+            });
+            
+            base64TextCard.addEventListener('click', function() {
+                homeContent.style.display = 'none';
+                base64ImageContent.style.display = 'none';
+                base64TextContent.style.display = 'block';
+                certificateDecoderContent.style.display = 'none';
+            });
+            
+            certificateDecoderCard.addEventListener('click', function() {
+                homeContent.style.display = 'none';
+                base64ImageContent.style.display = 'none';
+                base64TextContent.style.display = 'none';
+                certificateDecoderContent.style.display = 'block';
+            });
+            
+            homeNav.addEventListener('click', showHomeContent);
+            backButton.addEventListener('click', showHomeContent);
+            
+            const encodeImageBtn = document.getElementById('encode-image-btn');
+            const decodeImageBtn = document.getElementById('decode-image-btn');
+            const encodeImagePanel = document.getElementById('encode-image-panel');
+            const decodeImagePanel = document.getElementById('decode-image-panel');
+            const imageInput = document.getElementById('image-input');
+            const imagePreview = document.getElementById('image-preview');
+            const previewImg = document.getElementById('preview-img');
+            const dropArea = document.getElementById('drop-area');
+            const base64ImageInput = document.getElementById('base64-image-input');
+            const base64ImageOutput = document.getElementById('base64-image-output');
+            const copyImageOutputBtn = document.getElementById('copy-image-output');
+            const decodedImagePreview = document.getElementById('decoded-image-preview');
+            const decodedImg = document.getElementById('decoded-img');
+            
+            encodeImageBtn.addEventListener('click', function() {
+                encodeImageBtn.classList.add('bg-blue-600');
+                decodeImageBtn.classList.remove('bg-blue-600');
+                encodeImagePanel.classList.remove('hidden');
+                decodeImagePanel.classList.add('hidden');
+                decodedImagePreview.classList.add('hidden');
+            });
+            
+            decodeImageBtn.addEventListener('click', function() {
+                decodeImageBtn.classList.add('bg-blue-600');
+                encodeImageBtn.classList.remove('bg-blue-600');
+                decodeImagePanel.classList.remove('hidden');
+                encodeImagePanel.classList.add('hidden');
+            });
+            
+            dropArea.addEventListener('click', function() {
+                imageInput.click();
+            });
+            
+            imageInput.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    const file = this.files[0];
+                    
+                    if (file.type.match('image.*')) {
+                        const reader = new FileReader();
+                        
+                        reader.onload = function(e) {
+                            previewImg.src = e.target.result;
+                            imagePreview.classList.remove('hidden');
+                            dropArea.classList.add('hidden');
+                            
+                            base64ImageOutput.value = e.target.result;
+                        };
+                        
+                        reader.readAsDataURL(file);
+                    }
+                }
+            });
+            
+            base64ImageInput.addEventListener('input', function() {
+                try {
+                    const base64String = this.value.trim();
+                    if (base64String) {
+                        decodedImg.src = base64String;
+                        decodedImagePreview.classList.remove('hidden');
+                    }
+                } catch (e) {
+                    console.error('Invalid Base64 string');
+                }
+            });
+            
+            copyImageOutputBtn.addEventListener('click', function() {
+                base64ImageOutput.select();
+                document.execCommand('copy');
+                
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-check mr-1"></i> Copied!';
+                
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                }, 2000);
+            });
+            
+            const encodeTextBtn = document.getElementById('encode-text-btn');
+            const decodeTextBtn = document.getElementById('decode-text-btn');
+            const textInput = document.getElementById('text-input');
+            const textOutput = document.getElementById('text-output');
+            const copyTextOutputBtn = document.getElementById('copy-text-output');
+            const inputTextLabel = document.getElementById('input-text-label');
+            const outputTextLabel = document.getElementById('output-text-label');
+            
+            function encodeText() {
+                try {
+                    const input = textInput.value;
+                    const base64 = btoa(input);
+                    textOutput.value = base64;
+                } catch (e) {
+                    textOutput.value = "Error: Input contains characters that cannot be encoded";
+                }
+            }
+            
+            function decodeText() {
+                try {
+                    const input = textInput.value;
+                    const text = atob(input);
+                    textOutput.value = text;
+                } catch (e) {
+                    textOutput.value = "Error: Invalid Base64 input";
+                }
+            }
+            
+            encodeTextBtn.addEventListener('click', function() {
+                encodeTextBtn.classList.add('bg-blue-600');
+                decodeTextBtn.classList.remove('bg-blue-600');
+                inputTextLabel.textContent = 'Input Text';
+                outputTextLabel.textContent = 'Base64 Result';
+                textInput.placeholder = 'Type or paste text to encode...';
+                textInput.value = '';
+                textOutput.value = '';
+            });
+            
+            decodeTextBtn.addEventListener('click', function() {
+                decodeTextBtn.classList.add('bg-blue-600');
+                encodeTextBtn.classList.remove('bg-blue-600');
+                inputTextLabel.textContent = 'Base64 Input';
+                outputTextLabel.textContent = 'Decoded Text';
+                textInput.placeholder = 'Type or paste Base64 string to decode...';
+                textInput.value = '';
+                textOutput.value = '';
+            });
+            
+            textInput.addEventListener('input', function() {
+                if (encodeTextBtn.classList.contains('bg-blue-600')) {
+                    encodeText();
+                } else {
+                    decodeText();
+                }
+            });
+            copyTextOutputBtn.addEventListener('click', function() {
+                textOutput.select();
+                document.execCommand('copy');
+                
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-check mr-1"></i> Copied!';
+                
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                }, 2000);
+            });
+          
+        });
+    </script>
+</body>
+</html>
